@@ -11,3 +11,8 @@ docker run --rm \
 bin/d_rails db:migrate
 bin/d_rails db:seed
 bin/d_rails s
+
+
+para subir 
+descomentar linea 15 /home/marlon/Desktop/Arquitectura de software/newsletter-api/config/initializers/new_framework_defaults.rb
+descomentar de linea 9 a 12 /home/marlon/Desktop/Arquitectura de software/newsletter-api/config/database.yml
