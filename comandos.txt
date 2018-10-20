@@ -1,6 +1,6 @@
 git clone https://github.com/menoguerar/newsletter-api.git
 cd newsletter-api
-
+sudo su
 docker run docker/compose:1.13.0 version
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
@@ -14,5 +14,4 @@ bin/d_rails s
 
 
 para subir 
-descomentar linea 15 /home/marlon/Desktop/Arquitectura de software/newsletter-api/config/initializers/new_framework_defaults.rb
 descomentar de linea 9 a 12 /home/marlon/Desktop/Arquitectura de software/newsletter-api/config/database.yml
