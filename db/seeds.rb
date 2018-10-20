@@ -1,18 +1,16 @@
 require 'faker'
-# 5.times do |i|
-#     User.create([{
-#         name: Faker::Name.name ,
-#         email: Faker::Internet.email
-#     }])
+5.times do |i|
+    User.create([{
+        name: Faker::Name.name ,
+        email: Faker::Internet.email
+    }])
 
-#     Topic.create([{
-#         name: Faker::Book.genre 
-#     }])
-
-    
+    Topic.create([{
+        name: Faker::Book.genre 
+    }])
 
 
-# end
+end
 
 5.times do |i|
     UserTopic.create([{

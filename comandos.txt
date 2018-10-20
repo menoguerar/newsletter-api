@@ -15,3 +15,4 @@ bin/d_rails s
 
 para subir 
 descomentar de linea 9 a 12 /home/marlon/Desktop/Arquitectura de software/newsletter-api/config/database.yml
+descomentar seeds
