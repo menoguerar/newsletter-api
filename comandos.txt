@@ -1,0 +1,13 @@
+git clone https://github.com/menoguerar/newsletter-api.git
+cd newsletter-api
+
+docker run docker/compose:1.13.0 version
+docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v "$PWD:/rootfs/$PWD" \
+    -w="/rootfs/$PWD" \
+    docker/compose:1.13.0 build
+
+bin/d_rails db:migrate
+bin/d_rails db:seed
+bin/d_rails s
