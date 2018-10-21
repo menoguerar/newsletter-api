@@ -1,12 +1,22 @@
 class TopicsController < ApplicationController
   before_action :set_topic, only: [:show, :update, :destroy]
-
   # GET /topics
   # GET /topics.json
   def index
     @topics = Topic.all
-
     render json: @topics
+  end
+
+  def index2
+    @topics = Topic.all
+
+    json = { :topics => @topics}.to_json(root: false)
+   
+    render json: json
+  end
+
+  def default_serializer_options
+    {root: false}
   end
 
   # GET /topics/1

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "topics/index2", to: "topics#index2"
   resources :newsletter_topics
   resources :newsletters
   resources :user_topics

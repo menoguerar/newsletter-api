@@ -26,5 +26,7 @@ class ApplicationController < ActionController::API
       # "<#{posts_url(request.query_parameters.merge(page: page))}>; rel='#{rel}'"
       base_uri = request.url.split("?").first
       "<#{base_uri}?#{request.query_parameters.merge(page: page).to_param}>; rel='#{rel}'"
-    end    
+    end 
+    
+    
 end
