@@ -8,6 +8,15 @@ class NewslettersController < ApplicationController
     render json: @newsletters
   end
 
+  def index2
+    @newsletters = Newsletter.all
+
+    json = { :newsletters => @newsletters, }.to_json(:include =>:topics,root: false)
+   
+    render json: json
+  end
+
+  
   # GET /newsletters/1
   # GET /newsletters/1.json
   def show
@@ -54,6 +63,8 @@ class NewslettersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newsletter_params
-      params.require(:newsletter).permit(:title, :description, :topics)
+      params.require(:newsletter).permit(:title, :description, :topics, :url_to_image)
     end
+
+ 
 end
