@@ -1,6 +1,8 @@
 git clone https://github.com/menoguerar/newsletter-api.git
 cd newsletter-api
 sudo su
+git fetch --all
+git reset --hard origin/master
 docker run docker/compose:1.13.0 version
 docker run --rm \
     -v /var/run/docker.sock:/var/run/docker.sock \
