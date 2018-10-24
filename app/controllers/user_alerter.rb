@@ -10,20 +10,20 @@ class UserAlerter< ApplicationController
             puts @topic.inspect
             @users_of_topic = @topic.users
 
-            @user=User.find(12)
-            SendEmailJob.set(wait: 1.seconds).perform_later(@newsletter,@user)
-            # if @users_of_topic
-            #     puts "This user will be notified"
+            # @user=User.find(12)
+            # SendEmailJob.set(wait: 1.seconds).perform_later(@newsletter,@user)
+            if @users_of_topic
+                puts "This user will be notified"
 
-            #     for user in @users_of_topic
-            #         @user = user
-            #         if !notified_user.include?(@user.name)
-            #             notified_user.push(@user.name)
-            #             puts @user.inspect
-            #             SendEmailJob.set(wait: 2.seconds).perform_later(newsletter,@user)
-            #         end
-            #     end
-            # end
+                for user in @users_of_topic
+                    @user = user
+                    if !notified_user.include?(@user.name)
+                        notified_user.push(@user.name)
+                        puts @user.inspect
+                        SendEmailJob.set(wait: 2.seconds).perform_later(newsletter,@user)
+                    end
+                end
+            end
         end
         
     end
