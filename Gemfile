@@ -20,6 +20,12 @@ gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 
 gem 'active_model_serializers', '~> 0.10.0'
 
+gem 'delayed_job_active_record'
+
+gem 'wisper'
+
+gem "figaro"
+
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'

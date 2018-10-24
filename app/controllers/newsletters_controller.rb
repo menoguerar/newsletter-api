@@ -37,6 +37,12 @@ class NewslettersController < ApplicationController
     else
       render json: @newsletter.errors, status: :unprocessable_entity
     end
+
+    create_newsletter = CreateNewsletter.new
+
+    create_newsletter.subscribe(UserAlerter.new)
+       
+    create_newsletter.call(@newsletter.id,params[:topics])
   end
 
   # PATCH/PUT /newsletters/1
