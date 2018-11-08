@@ -22,7 +22,7 @@ descomentar seeds
 
 version: '2'
 services:
-  db:
+  sa-newsletter-db:
     image: mysql:5.7
     labels:
       nodo: newsletter
@@ -38,7 +38,7 @@ services:
     ports:
       - "3306:3306"
     
-  app:
+  sa-newsletter-ms:
     image: menoguera/newsletter-api
     labels:
       nodo: newsletter
@@ -50,14 +50,14 @@ services:
     ports:
       - "3002:3000"
     depends_on:
-      - db
+      - sa-newsletter-db
     links:
-      - db
+      - sa-newsletter-db
     environment:
       DB_USER: root
       DB_NAME: railsapp
       DB_PASSWORD: password
-      DB_HOST: db
+      DB_HOST: sa-newsletter-db
     
       
 
