@@ -19,7 +19,7 @@ class UserTopicsController < ApplicationController
     @user_topic = UserTopic.new(user_topic_params)
 
     if @user_topic.save
-      render :show, status: :created, location: @user_topic
+      render json: @user_topic
     else
       render json: @user_topic.errors, status: :unprocessable_entity
     end
