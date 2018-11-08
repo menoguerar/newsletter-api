@@ -10,6 +10,7 @@ class UserTopicsController < ApplicationController
   # GET /user_topics/1
   # GET /user_topics/1.json
   def show
+    render json: @user_topic
   end
 
   # POST /user_topics
