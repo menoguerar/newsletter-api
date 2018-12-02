@@ -10,8 +10,8 @@ docker run --rm \
     -w="/rootfs/$PWD" \
     docker/compose:1.13.0 build --no-cache
 
-bin/d_rails db:migrate
-bin/d_rails db:seed
+bin/rails db:migrate
+bin/rails db:seed
 bin/d_rails s
 
 
@@ -22,12 +22,11 @@ descomentar seeds
 
 version: '2'
 services:
-  sa-newsletter-db:
+  db:
     image: mysql:5.7
     labels:
       nodo: newsletter
-      io.rancher.scheduler.affinity:host_label_ne: type=nodeNewsletter
-      io.rancher.scheduler.global: 'false'
+      io.rancher.scheduler.affinity:host_label_ne: type=rancher-node-bot1.c.proyecto-arquisoft.internal
       io.rancher.container.pull_image: always
     restart: always
     environment:
@@ -37,27 +36,25 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
-    
-  sa-newsletter-ms:
+  app:
     image: menoguera/newsletter-api
     labels:
       nodo: newsletter
-      io.rancher.scheduler.affinity:host_label_ne: type=nodeNewsletter
-      io.rancher.scheduler.global: 'false'
+      io.rancher.scheduler.affinity:host_label_ne: type=rancher-node-bot1.c.proyecto-arquisoft.internal
       io.rancher.container.pull_image: always
     volumes:
       - ./railsapp
     ports:
       - "3002:3000"
     depends_on:
-      - sa-newsletter-db
+      - db
     links:
-      - sa-newsletter-db
+      - db
     environment:
       DB_USER: root
       DB_NAME: railsapp
       DB_PASSWORD: password
-      DB_HOST: sa-newsletter-db
+      DB_HOST: db
     
       
 
