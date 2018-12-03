@@ -12,7 +12,7 @@ RUN bundle install
 
 ADD . /railsapp
 
-EXPOSE 3000
+EXPOSE 3002
 
 CMD ["/bin/bash", "/railsapp/bin/run_app"]
 

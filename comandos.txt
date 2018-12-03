@@ -22,11 +22,10 @@ descomentar seeds
 
 version: '2'
 services:
-  db:
+  sa-news-db:
     image: mysql:5.7
     labels:
-      nodo: newsletter
-      io.rancher.scheduler.affinity:host_label_ne: type=rancher-node-bot1.c.proyecto-arquisoft.internal
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
       io.rancher.container.pull_image: always
     restart: always
     environment:
@@ -36,25 +35,24 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
-  app:
+  sa-news-ms:
     image: menoguera/newsletter-api
     labels:
-      nodo: newsletter
-      io.rancher.scheduler.affinity:host_label_ne: type=rancher-node-bot1.c.proyecto-arquisoft.internal
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
       io.rancher.container.pull_image: always
     volumes:
       - ./railsapp
     ports:
       - "3002:3000"
     depends_on:
-      - db
+      - sa-news-db
     links:
-      - db
+      - sa-news-db
     environment:
       DB_USER: root
       DB_NAME: railsapp
       DB_PASSWORD: password
-      DB_HOST: db
+      DB_HOST: sa-news-db
     
       
 
@@ -96,3 +94,103 @@ services:
 
 io.rancher.scheduler.affinity:host_label_ne: type=rancher-node-bot1.c.proyecto-arquisoft.internal
 io.rancher.container.pull_image: always
+
+version: '2'
+services:
+  apollo-ldap:
+    image: osixia/openldap:1.1.8
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 200
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Apollo UN"
+      LDAP_DOMAIN: "apollo.unal.edu.co"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      #LDAP_READONLY_USER_USERNAME: "readonly"
+      #LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_BACKEND: "hdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      #LDAP_REPLICATION_CONFIG_SYNCPROV: "binddn="cn=admin,cn=config" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_DB_SYNCPROV: "binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ADMIN_PASSWORD searchbase="$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    labels:
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
+      io.rancher.container.pull_image: always
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    hostname: "apollo.org"
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "apollo-ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    labels:
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
+      io.rancher.container.pull_image: always
+    ports:
+      - "8085:80"
+    links:
+      - apollo-ldap
+
+version: '2'
+services:
+  sa-centers-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: sa-centers-db
+      MYSQL_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: '123'
+      MYSQL_USER: sa
+    ports:
+    - 3307:3306
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
+  sa-centers-ms:
+    image: dulfrey/sa_centers_ms
+    links:
+    - sa-centers-db:sa-centers-db
+    ports:
+    - 3001:3000
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
+
+version: '2'
+services:
+  sa-bot-db:
+    image: mongo
+    ports:
+    - 27017:27017
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
+  sa-bot-ms:
+    image: diefrodriguezcha/sa_bot_ms
+    links:
+    - sa-bot-db:sa-bot-db
+    ports:
+    - 3000:3000
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.scheduler.affinity:host_label_ne: type=ranche-node-news.c.proyecto-arquisoft.internal
