@@ -14,7 +14,5 @@ ADD . /railsapp
 
 EXPOSE 3002
 
-CMD ["/bin/bash", "/railsapp/bin/run_app"]
 
-RUN gem install rack-cors
-RUN bundle install
+
